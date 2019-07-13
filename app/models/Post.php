@@ -6,7 +6,7 @@
       $this->db = new Database;
     }
 
-    public function getPosts(){
+    public function getPosts($limit='', $start=''){
       $this->db->query('SELECT *,
                       posts.id as postId,
                       users.id as userId,
@@ -16,7 +16,9 @@
                        INNER JOIN users
                        ON posts.user_id = users.id
                        ORDER BY posts.created_at DESC
-                       ');
+                       LIMIT :start, :limit');
+      $this->db->bind(':start', $start);
+      $this->db->bind(':limit', $limit);
 
       $results = $this->db->resultSet();
 
@@ -74,5 +76,11 @@
       } else {
         return false;
       }
+    }
+
+    public function getAllRows(){
+      $this->db->query('SELECT * from users');
+      $this->db->execute();
+      return $this->db->rowCount();
     }
   }

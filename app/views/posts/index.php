@@ -26,7 +26,38 @@
     <a href="<?php echo URLROOT . '/posts/show/' . $post->postId; ?>" class="btn btn-dark">More</a>     
   </div>
 <?php endforeach; ?>
+<div class="card card-body mb-3">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <?php
+        if(!isset($_GET['page']) or $_GET['page'] == 0){
+          echo '<li class="page-item disabled"><a href="#" class="page-link"><<</a></li>';
+        } else {
+          $prevPage = $data['page_num'] - 1;
+          echo '<li class="page-item"><a href="?page='.$prevPage.'" class="page-link"><<</a></li>';
+        }
+        $pageText = 0;
+        for($page=$data['page_num'];$page<$data['num_of_pages'];$page++){
+          $pageText = $page + 1;
+          if(isset($_GET['page']) and $_GET['page'] == $page){
+            echo '<li class="page-item active"><a class="page-link" href="?page='.$page.'">'.$pageText.'</a></li>';
+          } else {
+            echo '<li class="page-item"><a class="page-link" href="?page='.$page.'">'.$pageText.'</a></li>';
+          }
+        }
+        $nxtPage = $data['page_num'] + 1;
+        if((isset($_GET['page'])) and ($_GET['page'] == ($data['num_of_pages'] - 1))){
+          echo '<li class="page-item disabled"><a class="page-link" href="?page='.$data['page_num'].'">>></a></li>';
+        } else {
+          echo '<li class="page-item"><a class="page-link disabled" href="?page='.$nxtPage.'">>></a></li>';
+        }
+      ?>
+    </ul>
+  </nav>
+</div>
 <?php require APPROOT . '/views/inc/footer.php'; ?>
+
+
 
 
 

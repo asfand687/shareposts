@@ -8,9 +8,22 @@
       $this->userModel = $this->model('User');
     }
     public function index(){
-      $posts = $this->postModel->getPosts();
+      $limit = 5;
+      if(isset($_GET['page'])){
+        $page = $_GET['page'];
+      }else {
+        $page = 0;
+      }
+      $totalRows = $this->postModel->getAllRows();
+      $start = $page * $limit;
+      $posts = $this->postModel->getPosts($limit, $start);
+      $numOfPages = ceil($totalRows/$limit); 
       $data = [
-        'posts' => $posts
+        'posts' => $posts,
+        'page_num' => $page,
+        'start' => $start,
+        'total_rows' => $totalRows,
+        'num_of_pages' => $numOfPages
       ];
       $this->view('posts/index', $data);
     }
